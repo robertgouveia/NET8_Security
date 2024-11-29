@@ -24,7 +24,7 @@ public class LoginModel : PageModel
         if (Credential is not { Username: "admin", Password: "password" }) return Page();
         
         // Create Security Context
-        var claims = new List<Claim> { new (ClaimTypes.Name, "admin"), new (ClaimTypes.Email, "admin@website.com") };
+        var claims = new List<Claim> { new (ClaimTypes.Name, "admin"), new (ClaimTypes.Email, "admin@website.com"), new ("Department", "HR"), new ("Admin", "true"), new ("Manager", "true")};
 
         // Should use a constant instead of hard code
         var identity = new ClaimsIdentity(claims, "CookieAuth"); // Holds Claims for an Auth Type

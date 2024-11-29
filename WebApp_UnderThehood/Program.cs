@@ -6,6 +6,16 @@ builder.Services.AddRazorPages();
 builder.Services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", opt =>
 {
     opt.Cookie.Name = "CookieAuth";
+    opt.LoginPath = "/Account/Login"; // Default
+    opt.AccessDeniedPath = "/Account/AccessDenied";
+});
+
+builder.Services.AddAuthorization(opt =>
+{
+    // HR user policy is met if the department claim holds HR
+    opt.AddPolicy("HRUser", policy => policy.RequireClaim("Department", "HR"));
+    opt.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
+    opt.AddPolicy("HRManagerOnly", policy => policy.RequireClaim("Department", "HR").RequireClaim("Manager"));
 });
 
 var app = builder.Build();
@@ -22,8 +32,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication(); // Allows for calling Authentication Handler
+app.UseAuthorization();
 
 app.MapRazorPages();
 
