@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
+using WebApp_UnderThehood.Authorization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<IAuthorizationHandler, HRManagerProbationRequirementHandler>();
 
 builder.Services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", opt =>
 {
@@ -15,7 +19,9 @@ builder.Services.AddAuthorization(opt =>
     // HR user policy is met if the department claim holds HR
     opt.AddPolicy("HRUser", policy => policy.RequireClaim("Department", "HR"));
     opt.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
-    opt.AddPolicy("HRManagerOnly", policy => policy.RequireClaim("Department", "HR").RequireClaim("Manager"));
+    opt.AddPolicy("HRManagerOnly",
+        policy => policy.RequireClaim("Department", "HR").RequireClaim("Manager").Requirements
+            .Add(new HrManagerProbationRequirement(3))); // Custom requirement
 });
 
 var app = builder.Build();
