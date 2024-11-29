@@ -25,6 +25,12 @@ builder.Services.AddAuthorization(opt =>
             .Add(new HrManagerProbationRequirement(3))); // Custom requirement
 });
 
+// Add reference to our api
+builder.Services.AddHttpClient("OurWebAPI", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:3000/"); 
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
