@@ -43,7 +43,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+app.UseAuthentication(); // Required for Auth
 app.UseAuthorization();
 
 app.MapControllers();

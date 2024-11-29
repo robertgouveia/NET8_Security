@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebApp_UnderThehood.Authorization;
 
 namespace WebApp_UnderThehood.Pages.Account;
 
@@ -39,18 +40,4 @@ public class LoginModel : PageModel
 
         return RedirectToPage("/Index");
     }
-}
-
-public class Credential
-{
-    [Required]
-    [Display(Name = "User Name")]
-    public string Username { get; set; } = string.Empty;
-    
-    [Required]
-    [DataType(DataType.Password)]
-    public string Password { get; set; } = string.Empty;
-    
-    [Display(Name = "Remember me?")]
-    public bool RememberMe { get; set; } = false;
 }

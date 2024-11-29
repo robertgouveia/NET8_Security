@@ -31,6 +31,17 @@ builder.Services.AddHttpClient("OurWebAPI", client =>
     client.BaseAddress = new Uri("https://localhost:3000/"); 
 });
 
+// Adding sessions for token
+builder.Services.AddSession(opt =>
+{
+    // Only backend
+    opt.Cookie.HttpOnly = true;
+    // Session must be active
+    opt.IdleTimeout = TimeSpan.FromMinutes(20);
+    // Session is required for the application to function
+    opt.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,6 +58,7 @@ app.UseRouting();
 
 app.UseAuthentication(); // Allows for calling Authentication Handler
 app.UseAuthorization();
+app.UseSession(); // Added Sessions
 
 app.MapRazorPages();
 
