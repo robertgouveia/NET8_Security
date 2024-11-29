@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +27,11 @@ builder.Services.AddAuthentication(opt =>
         ClockSkew = TimeSpan.Zero // Facilitate value of the lifetime
     };
 }); //.AddJwtBearer("scheme2", opt => { }); -- Can apply multiple but would require a name
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
