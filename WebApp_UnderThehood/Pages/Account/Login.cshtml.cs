@@ -29,7 +29,13 @@ public class LoginModel : PageModel
         // Should use a constant instead of hard code
         var identity = new ClaimsIdentity(claims, "CookieAuth"); // Holds Claims for an Auth Type
         ClaimsPrincipal claimsPrincipal = new(identity);
-        await HttpContext.SignInAsync("CookieAuth", claimsPrincipal); // Signs in using the scheme and principle
+
+        var authProperies = new AuthenticationProperties
+        {
+            IsPersistent = Credential.RememberMe, // Allowing survival of browser closure
+        };
+        
+        await HttpContext.SignInAsync("CookieAuth", claimsPrincipal, authProperies); // Signs in using the scheme and principle
 
         return RedirectToPage("/Index");
     }
@@ -44,4 +50,7 @@ public class Credential
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; } = string.Empty;
+    
+    [Display(Name = "Remember me?")]
+    public bool RememberMe { get; set; } = false;
 }
