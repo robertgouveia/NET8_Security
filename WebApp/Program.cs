@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Resend;
+using Stripe;
 using WebApp.Data;
 using WebApp.Data.Account;
 
@@ -43,6 +44,7 @@ builder.Services.AddAuthentication().AddGitHub(opt =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("STRIPE_API_KEY");
 
 //builder.Services.Configure<SMTP>(builder.Configuration.GetSection("SMTP")); Binds Section to Class
 

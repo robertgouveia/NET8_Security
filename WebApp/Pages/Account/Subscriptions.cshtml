@@ -1,0 +1,29 @@
+@page
+@model WebApp.Pages.Account.Subscriptions
+
+<h3>Subscriptions</h3>
+<br/>
+
+<div class="container border" style="padding: 20px;">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <div class="mb-3 row">
+            <div class="col-2">
+                <label asp-for="SubscriptionViewModel.Plan"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="SubscriptionViewModel.Plan" class="form-select">
+                    <option value="basic">Basic Plan £50/mo</option>
+                    <option value="premium">Premium Plan £100/mo</option>
+                    <option value="enterprise">Enterprise Plan £120/mo</option>
+                </select>
+                <span class="text-danger" asp-validation-for="SubscriptionViewModel.Plan"></span></div>
+        </div>
+
+        <div class="mb-3 row">
+            <div class="col-2">
+                <input type="submit" class="btn btn-primary" value="Purchase"/>
+            </div>
+        </div>
+    </form>
+</div>

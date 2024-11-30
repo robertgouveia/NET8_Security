@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +41,7 @@ public class Register(UserManager<User> manager, IResend resend) : PageModel
             {
                 new("Department", RegisterViewModel.Department),
                 new("Position", RegisterViewModel.Position),
+                new("Plan", "free"),
             };
             await manager.AddClaimsAsync(user, claims);
             
@@ -59,6 +59,7 @@ public class Register(UserManager<User> manager, IResend resend) : PageModel
                 TextBody = $"Click the link: {link}" // Optional, but recommended
             };
 
+            // Handle Email Response
             var res = await resend.EmailSendAsync(message);
             return RedirectToPage("/Account/Login");
         }

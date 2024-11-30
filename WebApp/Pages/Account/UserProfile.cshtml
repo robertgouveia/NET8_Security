@@ -34,6 +34,26 @@
                 <input type="text" asp-for="UserProfileViewModel.Position" class="form-control">
                 <span class="text-danger" asp-validation-for="UserProfileViewModel.Position"></span></div>
         </div>
+        
+        <div class="mb-3 row">
+            <div class="col-2">
+                <label class="form-label">Plan</label>
+            </div>
+            <div class="col-5">
+                <select class="form-select" disabled>
+                    <div class="col-5">
+                        @if (!string.IsNullOrWhiteSpace(Model.Plan))
+                        {
+                        <option>@Model.Plan</option>
+                        }
+                        else
+                        {
+                        <option>Free</option>
+                        }
+                    </div>
+                </select>
+            </div>
+        </div>
 
         <div class="mb-3 row">
             <div class="col-2">

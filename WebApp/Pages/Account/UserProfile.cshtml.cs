@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stripe;
 using WebApp.Data.Account;
+using ProductListOptions = Stripe.Climate.ProductListOptions;
+using ProductService = Stripe.Climate.ProductService;
 
 namespace WebApp.Pages.Account;
 
@@ -16,8 +19,10 @@ public class UserProfile(UserManager<User> manager, SignInManager<User> signInMa
     
     [BindProperty]
     public string? SuccessMessage { get; set; } // Needs to be nullable else you cannot submit form
+
+    public string? Plan { get; set; } = string.Empty;
     
-    public async Task<IActionResult> OnGet()
+    public async Task<IActionResult> OnGetAsync()
     {
         SuccessMessage = string.Empty;
         
