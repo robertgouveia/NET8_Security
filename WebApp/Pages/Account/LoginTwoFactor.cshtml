@@ -1,0 +1,21 @@
+@page
+@model WebApp.Pages.Account.LoginTwoFactor
+
+<h3>Enter your MFA Code</h3>
+
+<div class="container border p-2">
+    <form method="post">
+        <div class="mb-3" asp-validation-summary="All">
+            <label class="form-label" asp-for="MfaViewModel.Token"></label>
+            <input type="text" class="form-control" asp-for="MfaViewModel.Token">
+            <span asp-validation-for="MfaViewModel.Token" class="text-danger"></span>
+        </div>
+        <div class="mb-3" hidden>
+            <input type="checkbox" class="form-check-input" asp-for="MfaViewModel.RememberMe">
+            <label class="form-check-label" asp-for="MfaViewModel.RememberMe"></label>
+            <span asp-validation-for="MfaViewModel.RememberMe" class="text-danger"></span>
+        </div>
+
+        <input type="submit" value="Confirm" class="btn btn-primary">
+    </form>
+</div>

@@ -25,7 +25,7 @@ builder.Services.AddIdentity<User, IdentityRole>(opt =>
 
         opt.SignIn.RequireConfirmedEmail = true;
     }).AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders(); // For Generating Tokens (Email Confirmation)
+    .AddDefaultTokenProviders(); // For Generating Tokens (Email Confirmation) -- Also Allows for 2FA
 
 // Configure Cookie settings with Identity
 builder.Services.ConfigureApplicationCookie(opt =>

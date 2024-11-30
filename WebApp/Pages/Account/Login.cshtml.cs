@@ -24,6 +24,11 @@ public class LoginModel(SignInManager<User> manager) : PageModel
         var result = await manager.PasswordSignInAsync(Credential.Email, Credential.Password, Credential.RememberMe, false);
         if (result.Succeeded) return RedirectToPage("/Index");
 
+        if (result.RequiresTwoFactor)
+        {
+            return RedirectToPage("/Account/LoginTwoFactor", new { Credential.Email, Credential.RememberMe  });
+        }
+
         if (result.IsLockedOut)
         {
             ModelState.AddModelError("Login", "Your account is locked out");
