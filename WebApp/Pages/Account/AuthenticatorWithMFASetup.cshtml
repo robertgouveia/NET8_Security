@@ -1,0 +1,26 @@
+@page
+@model WebApp.Pages.Account.AuthenticatorWithMFASetup
+
+<div class="container border p-2">
+    @if (Model.Succeeded)
+    {
+        <div class="alert alert-success">Authenticator is setup</div>
+    }
+    
+    <h3>Step 1: Please enter the key to your Authenticator App</h3>
+    <p>@Model.MfaSetupViewModel.Key</p>
+    <br/>
+    <h3>Step 2: Please enter the code from your Authenticator App</h3>
+
+    <form method="post">
+        <div class="mb-3" asp-validation-summary="All">
+            <label class="form-label" asp-for="MfaSetupViewModel.SecurityCode"></label>
+            <input type="text" class="form-control" asp-for="MfaSetupViewModel.SecurityCode">
+            <span asp-validation-for="MfaSetupViewModel.SecurityCode" class="text-danger"></span>
+        </div>
+
+        <input type="hidden" asp-for="MfaSetupViewModel.Key"/> <!-- Key disappears if you post without it -->
+
+        <input type="submit" value="Verify" class="btn btn-primary">
+    </form>
+</div>
