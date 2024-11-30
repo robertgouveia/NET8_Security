@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,13 +30,21 @@ public class Register(UserManager<User> manager, IResend resend) : PageModel
         {
             Email = RegisterViewModel.Email,
             UserName = RegisterViewModel.Email,
-            Department = RegisterViewModel.Department,
-            Position = RegisterViewModel.Position,
+            //Department = RegisterViewModel.Department,
+            //Position = RegisterViewModel.Position, -- Can also be done with claims
         };
-
+        
+        
         var result = await manager.CreateAsync(user, RegisterViewModel.Password);
         if (result.Succeeded)
         {
+            var claims = new List<Claim>
+            {
+                new("Department", RegisterViewModel.Department),
+                new("Position", RegisterViewModel.Position),
+            };
+            await manager.AddClaimsAsync(user, claims);
+            
             var token = await manager.GenerateEmailConfirmationTokenAsync(user); // User contains ID after CreateAsync
             
             // Send an Email
