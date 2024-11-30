@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Resend;
+using WebApp.Data.Account;
 
 namespace WebApp.Pages.Account;
 
-public class Register(UserManager<IdentityUser> manager, IResend resend) : PageModel
+public class Register(UserManager<User> manager, IResend resend) : PageModel
 {
     [BindProperty]
     public RegisterViewModel RegisterViewModel { get; set; } = new();
@@ -24,10 +25,12 @@ public class Register(UserManager<IdentityUser> manager, IResend resend) : PageM
         // Validate Email (Optional)
         
         // Create User
-        var user = new IdentityUser
+        var user = new User
         {
             Email = RegisterViewModel.Email,
             UserName = RegisterViewModel.Email,
+            Department = RegisterViewModel.Department,
+            Position = RegisterViewModel.Position,
         };
 
         var result = await manager.CreateAsync(user, RegisterViewModel.Password);
@@ -40,13 +43,12 @@ public class Register(UserManager<IdentityUser> manager, IResend resend) : PageM
 
             var message = new EmailMessage
             {
-                From = "test@willowstutbury.uk",
+                From = "localhost@websitech.uk",
                 To = user.Email,
                 Subject = "Confirm your email",
-                HtmlBody = $"Click the link: <a href='{link}'>{link}</a>", // Ensure proper link formatting
+                HtmlBody = $"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title>Confirm your Email!</title></head><body><h1>Please click the link below:</h1><br><a href='https://websitech.uk/confirmEmail'>Confirmation Link</a></body></html>", // Ensure proper link formatting
                 TextBody = $"Click the link: {link}" // Optional, but recommended
             };
-
 
             var res = await resend.EmailSendAsync(message);
             return RedirectToPage("/Account/Login");
@@ -70,4 +72,10 @@ public class RegisterViewModel
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; } = string.Empty;
+    
+    [Required]
+    public string Department { get; set; } = string.Empty;
+    
+    [Required]
+    public string Position { get; set; } = string.Empty;
 }

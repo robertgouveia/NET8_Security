@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Authorization;
+using WebApp.Data.Account;
 
 namespace WebApp.Pages.Account;
 
-public class LoginModel(SignInManager<IdentityUser> manager) : PageModel
+public class LoginModel(SignInManager<User> manager) : PageModel
 {
     [BindProperty]
     public Credential Credential { get; set; } = new();

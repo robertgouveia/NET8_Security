@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Resend;
 using WebApp.Data;
+using WebApp.Data.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 });
 
 // Defining User, Role and DB
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(opt =>
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
     {
         opt.Password.RequiredLength = 8;
         opt.Password.RequireLowercase = true;
