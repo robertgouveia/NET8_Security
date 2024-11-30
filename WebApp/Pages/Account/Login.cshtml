@@ -38,5 +38,16 @@
                 <a href="/Account/Register" class="btn btn-link">Register</a>
             </div>
         </div>
+        
+        <p>
+        Social Media Logins:
+        </p>
+        <div class="form-group">
+            @foreach (var provider in Model.ExternalLogins)
+            {
+                <!-- Need to post it somewhere else -->
+                <button type="submit" asp-page-handler="LoginExternally" name="provider" value="@provider.Name" class="btn btn-primary">Login with @provider.DisplayName</button>
+            }
+        </div>
     </form>
 </div>

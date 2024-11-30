@@ -35,7 +35,14 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+builder.Services.AddAuthentication().AddGitHub(opt =>
+{
+    opt.ClientId = builder.Configuration.GetValue<string>("GITHUB_APP_ID") ?? string.Empty;
+    opt.ClientSecret = builder.Configuration.GetValue<string>("GITHUB_APP_SECRET") ?? string.Empty;
+});
+
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
 
 //builder.Services.Configure<SMTP>(builder.Configuration.GetSection("SMTP")); Binds Section to Class
 
@@ -65,5 +72,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers(); // Needed for OAuth2
 
 app.Run();

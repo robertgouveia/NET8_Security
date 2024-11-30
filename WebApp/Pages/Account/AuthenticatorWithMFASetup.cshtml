@@ -7,8 +7,11 @@
         <div class="alert alert-success">Authenticator is setup</div>
     }
     
-    <h3>Step 1: Please enter the key to your Authenticator App</h3>
-    <p>@Model.MfaSetupViewModel.Key</p>
+    <h3>Step 1: Scan the QR Code</h3>
+    @if (Model.MfaSetupViewModel.QRCodeBytes is not null)
+    {
+        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.MfaSetupViewModel.QRCodeBytes)}")" width="300" height="300" alt=""/>
+    }
     <br/>
     <h3>Step 2: Please enter the code from your Authenticator App</h3>
 
@@ -20,6 +23,7 @@
         </div>
 
         <input type="hidden" asp-for="MfaSetupViewModel.Key"/> <!-- Key disappears if you post without it -->
+        <input type="hidden" asp-for="MfaSetupViewModel.QRCodeBytes"/> <!-- QRCode disappears if you post without it -->
 
         <input type="submit" value="Verify" class="btn btn-primary">
     </form>

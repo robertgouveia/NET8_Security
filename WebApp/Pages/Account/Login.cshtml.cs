@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Authorization;
 using WebApp.Data.Account;
@@ -12,9 +12,13 @@ public class LoginModel(SignInManager<User> manager) : PageModel
     [BindProperty]
     public Credential Credential { get; set; } = new();
     
-    public void OnGet()
+    [BindProperty]
+    public IEnumerable<AuthenticationScheme> ExternalLogins { get; set; }
+    
+    public async Task OnGetAsync()
     {
-        
+        // Gets external providers
+        ExternalLogins = await manager.GetExternalAuthenticationSchemesAsync();
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -26,7 +30,7 @@ public class LoginModel(SignInManager<User> manager) : PageModel
 
         if (result.RequiresTwoFactor)
         {
-            return RedirectToPage("/Account/LoginTwoFactor", new { Credential.Email, Credential.RememberMe  });
+            return RedirectToPage("/Account/LoginTwoFactorMFA", new { Credential.RememberMe  });
         }
 
         if (result.IsLockedOut)
@@ -36,5 +40,14 @@ public class LoginModel(SignInManager<User> manager) : PageModel
         
         ModelState.AddModelError("Login", "Failed to login");
         return Page();
+    }
+    
+    // Page handler
+    public IActionResult OnPostLoginExternally(string provider) // Provider comes from the name
+    {
+        var properties = manager.ConfigureExternalAuthenticationProperties(provider, Url.Action("ExternalLoginCallback", "Account"));
+
+        // Challenge helps us redirect
+        return Challenge(properties, provider);
     }
 }

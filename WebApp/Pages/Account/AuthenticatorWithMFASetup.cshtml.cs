@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QRCoder;
 using WebApp.Data.Account;
 
 namespace WebApp.Pages.Account;
@@ -33,6 +34,8 @@ public class AuthenticatorWithMFASetup : PageModel
         var key = await manager.GetAuthenticatorKeyAsync(user);
         
         MfaSetupViewModel.Key = key ?? string.Empty;
+
+        MfaSetupViewModel.QRCodeBytes = GenerateQRCode("web app", MfaSetupViewModel.Key, user.Email ?? string.Empty);
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -52,6 +55,15 @@ public class AuthenticatorWithMFASetup : PageModel
         Succeeded = true;
         return Page();
     }
+
+    private Byte[] GenerateQRCode(string provider, string key, string userEmail)
+    {
+        var qrCodeGenerator = new QRCodeGenerator();
+        var qrCodeData = qrCodeGenerator.CreateQrCode($"optauth://totp/{provider}:{userEmail}?secret={key}&issuer={provider}", QRCodeGenerator.ECCLevel.Q);
+
+        var qrCode = new PngByteQRCode(qrCodeData);
+        return qrCode.GetGraphic(20);
+    }
 }
 
 public class MFASetupViewModel
@@ -61,4 +73,6 @@ public class MFASetupViewModel
     [Required]
     [Display(Name = "Code")]
     public string SecurityCode { get; set; } = string.Empty;
+    
+    public Byte[]? QRCodeBytes { get; set; }
 }

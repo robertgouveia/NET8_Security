@@ -1,0 +1,15 @@
+@page
+@model WebApp.Pages.Account.LoginTwoFactorMFA
+
+<h3>Enter your MFA App Code</h3>
+
+<div class="container border p-2">
+    <form method="post">
+        <div class="mb-3" asp-validation-summary="All">
+            <label class="form-label" asp-for="MFAAppViewModel.Token"></label>
+            <input type="text" class="form-control" asp-for="MFAAppViewModel.Token">
+            <span asp-validation-for="MFAAppViewModel.Token" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Confirm" class="btn btn-primary">
+    </form>
+</div>
